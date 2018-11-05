@@ -16,4 +16,5 @@ jobs:
   steps:
   - powershell: Test-Path ~/.nuget/packages
   - script: dotnet restore PSReadLine/PSReadLine.csproj
+  - script: dotnet nuget locals all --list
   - powershell: Test-Path ~/.nuget/packages/InvokeBuild
