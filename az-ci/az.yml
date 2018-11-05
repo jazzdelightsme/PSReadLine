@@ -15,7 +15,10 @@ jobs:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
   steps:
-  - powershell: Test-Path ~/.nuget/packages
   - script: dotnet restore PSReadLine/PSReadLine.csproj
   - script: dotnet nuget locals all --list
-  - powershell: Test-Path ~/.nuget/packages/InvokeBuild
+  - powershell: |
+      $env:PSModulePath += "$([System.IO.Path]::PathSeparator)$(Resolve-Path ~/.nuget/packages)"
+      Import-Module InvokeBuild,platyPS
+      Invoke-Build -Task ZipRelease -Configuration Release
+
