@@ -61,7 +61,7 @@ task CheckDotnetInstalled `
                 $installDir = "${env:LOCALAPPDATA}\Microsoft\dotnet"
                 Invoke-WebRequest -Uri $installScriptUri -OutFile "${env:TEMP}/dotnet-install.ps1"
                 & "$env:TEMP/dotnet-install.ps1" -Version $CLI_VERSION -InstallDir $installDir
-                $script:dotnet = Join-Path $installDir "dotnet.exe"
+                $env:PATH += ";$installDir"
             }
             else
             {
@@ -201,7 +201,7 @@ task RunTests BuildMainModule, {
     {
         $outXml = "$PSScriptRoot\xunit-results.xml"
         Push-Location test
-        exec { & $runner test --no-build -c $configuration -f $target --logger "trx;LogFileName=$outXml" }
+        exec { & $runner test --no-build -c $configuration -f $target --logger "trx;LogFileName=$outXml" -v detailed }
         $wc = New-Object 'System.Net.WebClient'
         $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", $outXml)
         Pop-Location
@@ -209,7 +209,7 @@ task RunTests BuildMainModule, {
     else
     {
         Push-Location test
-        exec { & $runner test --no-build -c $configuration -f $target }
+        exec { & $runner test --no-build -c $configuration -f $target -v detailed }
         Pop-Location
     }
 
