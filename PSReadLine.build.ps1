@@ -209,7 +209,7 @@ task RunTests BuildMainModule, {
     else
     {
         Push-Location test
-        exec { & $runner test --no-build -c $configuration -f $target -v detailed }
+        exec { & $runner test --no-build -c $configuration -f $target -v detailed -- RunConfiguration.MaxCpuCount=1 }
         Pop-Location
     }
 
