@@ -18,9 +18,7 @@ jobs:
   - script: dotnet restore PSReadLine/PSReadLine.csproj
   - script: dotnet nuget locals all --list
   - powershell: |
-      Get-ChildItem ~/.nuget/packages
-      $env:PSModulePath += "$([System.IO.Path]::PathSeparator)$(Resolve-Path ~/.nuget/packages)"
-      $env:PSModulePath -split "$([System.IO.Path]::PathSeparator)"
+      Install-Module -Force InvokeBuild,platyPS
       Import-Module InvokeBuild,platyPS
       Invoke-Build -Task ZipRelease -Configuration Release
 
