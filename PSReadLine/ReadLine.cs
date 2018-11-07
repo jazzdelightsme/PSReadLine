@@ -333,7 +333,10 @@ namespace Microsoft.PowerShell
                     // by throwing an "InvalidOperationException".
                     // Therefore, if either stdin or stdout is redirected, PSReadLine doesn't really work,
                     // so throw and let PowerShell call Console.ReadLine or do whatever else it decides to do.
-                    throw new NotSupportedException();
+                    if (Environment.GetEnvironmentVariable("PSREADLINE_TESTRUN") == null)
+                    {
+                        throw new NotSupportedException();
+                    }
                 }
 
                 try
